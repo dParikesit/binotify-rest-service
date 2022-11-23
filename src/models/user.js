@@ -11,11 +11,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   User.init({
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      unique: true,
-    },
     email: {
       type: DataTypes.STRING,
       unique: true,
@@ -42,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function(models) {
     // associations can be defined here
     User.hasMany(models.Song, {
-      foreignKey: 'user_id',
+      foreignKey: 'id',
       as: 'songs',
     });
   };

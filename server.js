@@ -15,6 +15,15 @@ app.use(cors({
     credentials: true
 }));
 
+const db = require("./src/models");
+db.sequelize.sync({ force: true })
+.then(() => {
+console.log("Synced db.");
+})
+.catch((err) => {
+console.log("Failed to sync db: " + err.message);
+});
+
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to bezkoder application." });
 });
@@ -22,3 +31,6 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
 });
+
+const userRoute = require("./src/routes/user");
+app.use("/api", userRoute);
