@@ -1,5 +1,6 @@
 const User = require('../models').User;
 const bcrypt = require('bcrypt');
+const { generateAccessToken } = require('../middlewares/jwt');
 
 const createUser = (req, res) => {
     let data = req.body;

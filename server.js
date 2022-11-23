@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser')
 require('dotenv').config();
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(cors({
     origin: process.env.CLIENT_URL,
     credentials: true
 }));
+app.use(cookieParser());
 
 const db = require("./src/models");
 db.sequelize.sync({ force: true })
