@@ -7,7 +7,6 @@ module.exports = {
         'users',
         [
           {
-            user_id: 1,
             email: 'iniadmin@gmail.com',
             password: 'iniadmin',
             username: "iniadmin",
@@ -17,7 +16,6 @@ module.exports = {
             updatedAt: new Date(0).toISOString(),
           },
           {
-            user_id: 2,
             email: 'iniuser@gmail.com',
             password: 'iniuser',
             username: "iniuser",

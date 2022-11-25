@@ -26,13 +26,12 @@ console.log("Synced db.");
 console.log("Failed to sync db: " + err.message);
 });
 
-app.get("/", (req, res) => {
-    res.json({ message: "Welcome to bezkoder application." });
-});
-
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
 });
 
-const userRoute = require("./src/routes/user");
-app.use("/api", userRoute);
+const userRoutes = require("./src/routes/user");
+app.use("/api", userRoutes);
+
+const songRoutes = require("./src/routes/song");
+app.use("/api", songRoutes);
