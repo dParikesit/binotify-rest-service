@@ -1,12 +1,23 @@
 const Song = require('../models').Song;
+const uploadFile = require("../middlewares/upload");
 
-const createSong = (req, res) => {
+const createSong = async (req, res) => {
     const data = req.body;
+    try {
+        await uploadFile(req, res);
+        if (req.file == undefined) {
+            return res.status(400).send({ message: "Please upload a file!" });
+        }
+
+    } catch (error) {
+        res.status(400).json({message: "Error: " + error});
+    }
+
     Song.create({
         song_id: data.song_id,
         judul: data.judul,
         penyanyi_id: data.penyanyi_id,
-        audio_path: data.audio_path,
+        audio_path: req.file.filename,
     }).then(song => {
         res.status(201).json({message: "Song created!"});
     }).catch(error => {
@@ -34,13 +45,23 @@ const getSongById = (req, res) => {
     })
 }
 
-const updateSong = (req, res) => {
+const updateSong = async (req, res) => {
     const song_id = req.params.song_id;
     const data = req.body;
+
+    try {
+        await uploadFile(req, res);
+        if (req.file == undefined) {
+            return res.status(400).send({ message: "Please upload a file!" });
+        }
+
+    } catch (error) {
+        res.status(400).json({message: "Error: " + error});
+    }
+
     Song.update({
         judul: data.judul,
-        penyanyi_id: data.penyanyi_id,
-        audio_path: data.audio_path,
+        audio_path: req.file.filename,
     }, {where: {song_id: song_id}}).then(song => {
         res.status(200).json({message: "Song updated!"});
     }).catch(error => {
