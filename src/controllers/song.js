@@ -1,3 +1,4 @@
+const fs = require('fs');
 const Song = require('../models').Song;
 const uploadFile = require("../middlewares/upload");
 
@@ -105,6 +106,29 @@ const getSongsByPenyanyiId = (req, res) => {
     })
 }
 
+// stream song in uploads
+const listenSong = (req, res) => {
+    const song_id = req.params.song_id;
+    Song.findByPk(song_id).then(song => {
+        if (!song) {
+            return res.status(404).send({message: "Song not found!"});
+        }
+        const path = __basedir + "/uploads/" + song.audio_path;
+        const stat = fs.statSync(path);
+
+        res.writeHead(200, {
+            'Content-Type': 'audio/wav',
+            'Content-Length': stat.size
+        });
+
+        const readStream = fs.createReadStream(path);
+        readStream.pipe(res);
+    }).catch(error => {
+        res.status(400).json({message: "Error: " + error});
+    })
+}
+
+
 module.exports = {
     createSong,
     getAllSongs,
@@ -113,4 +137,5 @@ module.exports = {
     deleteSong,
     getSongByPenyanyiId,
     getSongsByPenyanyiId,
+    listenSong
 }
