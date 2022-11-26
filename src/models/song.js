@@ -11,6 +11,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Song.init({
+    song_id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
+    },
     judul:  {
       type: DataTypes.STRING,
       allowNull: false,

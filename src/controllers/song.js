@@ -27,9 +27,9 @@ const createSong = async (req, res) => {
 
 const getAllSongs = (req, res) => {
     Song.findAll().then(songs => {
-        res.status(200).json(songs);
+        return res.status(200).json(songs);
     }).catch(error => {
-        res.status(400).json({message: "Error: " + error});
+        return res.status(400).json({message: "Error: " + error});
     })
 }
 
@@ -39,42 +39,53 @@ const getSongById = (req, res) => {
         if (!song) {
             return res.status(404).send({message: "Song not found!"});
         }
-        res.status(200).json(song);
+        return res.status(200).json(song);
     }).catch(error => {
-        res.status(400).json({message: "Error: " + error});
+        return res.status(400).json({message: "Error: " + error});
     })
 }
 
 const updateSong = async (req, res) => {
     const song_id = req.params.song_id;
-    const data = req.body;
 
     try {
-        await uploadFile(req, res);
-        if (req.file == undefined) {
-            return res.status(400).send({ message: "Please upload a file!" });
+        if (!req.body.judul) {
+            await Song.findOne({where: {song_id: song_id}}).then(song => {
+                req.body.judul = song.judul;
+            })
         }
 
+        if (!req.body.audio_path) {
+            await Song.findOne({where: {song_id: song_id}}).then(song => {
+                req.body.path = song.audio_path;
+            })
+        } else {
+            await uploadFile(req, res);
+            if (!req.file) {
+                return res.status(400).send({message: "Please upload a file!"});
+            }
+            req.body.path = req.file.filename;
+        }
     } catch (error) {
-        res.status(400).json({message: "Error: " + error});
+        return res.status(400).json({message: "Error: " + error});
     }
 
     Song.update({
-        judul: data.judul,
-        audio_path: req.file.filename,
+        judul: req.body.judul,
+        audio_path: req.body.path,
     }, {where: {song_id: song_id}}).then(song => {
-        res.status(200).json({message: "Song updated!"});
+        return res.status(200).json({message: "Song updated!"});
     }).catch(error => {
-        res.status(400).json({message: "There is an error!"});
+        return res.status(400).json({message: "There is an error!"});
     })
 }
 
 const deleteSong = (req, res) => {
     const song_id = req.params.song_id;
     Song.destroy({where: {song_id: song_id}}).then(song => {
-        res.status(200).json({message: "Song deleted!"});
+        return res.status(200).json({message: "Song deleted!"});
     }).catch(error => {
-        res.status(400).json({message: "Error: " + error});
+        return res.status(400).json({message: "Error: " + error});
     })
 }
 
@@ -86,9 +97,9 @@ const getSongByPenyanyiId = (req, res) => {
         if (!song) {
             return res.status(404).send({message: "Song not found!"});
         }
-        res.status(200).json(song);
+        return res.status(200).json(song);
     }).catch(error => {
-        res.status(400).json({message: "Error: " + error});
+        return res.status(400).json({message: "Error: " + error});
     })
 }
 
@@ -99,9 +110,9 @@ const getSongsByPenyanyiId = (req, res) => {
         if (!songs) {
             return res.status(404).send({message: "Songs not found!"});
         }
-        res.status(200).json(songs);
+        return res.status(200).json(songs);
     }).catch(error => {
-        res.status(400).json({message: "Error: " + error});
+        return res.status(400).json({message: "Error: " + error});
     })
 }
 
@@ -123,7 +134,7 @@ const listenSong = (req, res) => {
         const readStream = fs.createReadStream(path);
         readStream.pipe(res);
     }).catch(error => {
-        res.status(400).json({message: "Error: " + error});
+        return res.status(400).json({message: "Error: " + error});
     })
 }
 
