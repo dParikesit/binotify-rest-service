@@ -3,26 +3,25 @@ const Song = require('../models').Song;
 const uploadFile = require("../middlewares/upload");
 
 const createSong = async (req, res) => {
-    const data = req.body;
     try {
         await uploadFile(req, res);
-        if (req.file == undefined) {
-            return res.status(400).send({ message: "Please upload a file!" });
+        if (!req.file) {
+            return res.status(400).send({message: "Please upload a file!"});
         }
+        req.body.path = req.file.filename;
 
     } catch (error) {
-        res.status(400).json({message: "Error: " + error});
+        return res.status(400).send({message: "Error: " + error});
     }
 
     Song.create({
-        song_id: data.song_id,
-        judul: data.judul,
-        penyanyi_id: data.penyanyi_id,
-        audio_path: req.file.filename,
+        judul: req.body.judul,
+        penyanyi_id: req.body.penyanyi_id,
+        audio_path: req.body.path,
     }).then(song => {
-        res.status(201).json({message: "Song created!"});
+        return res.status(201).json({message: "Song created!"});
     }).catch(error => {
-        res.status(400).json({message: "Error: " + error});
+        return res.status(400).json({message: "Error: " + error});
     })
 }
 
@@ -113,7 +112,7 @@ const listenSong = (req, res) => {
         if (!song) {
             return res.status(404).send({message: "Song not found!"});
         }
-        const path = __basedir + "/uploads/" + song.audio_path;
+        const path = "../../uploads/" + song.audio_path;
         const stat = fs.statSync(path);
 
         res.writeHead(200, {

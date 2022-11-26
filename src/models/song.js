@@ -11,11 +11,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Song.init({
-    song_id:  {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
     judul:  {
       type: DataTypes.STRING,
       allowNull: false,

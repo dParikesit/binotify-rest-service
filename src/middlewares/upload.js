@@ -1,17 +1,29 @@
 const multer = require('multer');
-const fs = require('fs');
 const util = require("util");
+const fs = require('fs');
 
 const storage = multer.diskStorage({
     filename: function (req, file, cb) {
         cb(null, Date.now() + "-" + file.originalname);
     },
     destination: function (req, file, cb) {
-        cb(null,  __basedir + '/uploads')
+        const  dir = './uploads';
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
+        cb(null, dir);
     },
 });
 
-const upload = multer({ storage: storage }).single("audio_path");
-let uploadFileMiddleware = util.promisify(upload);
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'audio/mpeg' || file.mimetype === 'audio/mp3' || file.mimetype === 'audio/wav') {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+};
 
-module.exports = uploadFileMiddleware;
+const upload = multer({ storage: storage, fileFilter: fileFilter}).single("audio_path");
+let uploadFile = util.promisify(upload);
+
+module.exports = uploadFile;

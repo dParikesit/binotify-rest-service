@@ -17,7 +17,7 @@ const login = async (req, res) => {
         if (result) {
             const accessToken = generateAccessToken({ username: user.username, isAdmin: user.isAdmin });
             res.cookie("jwt", accessToken, {secure: true, httpOnly: true});
-            return res.status(200).send({ message: 'Login successful' });
+            return res.status(200).json({ message: 'Login successful', accessToken: accessToken});
         }
         return res.status(400).send({ message: 'Password does not match' });
     });
