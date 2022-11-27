@@ -12,7 +12,7 @@ const login = async (req, res) => {
 
     bcrypt.compare(password, user.password, (err, result) => {
         if (err) {
-            return res.status(400).send({ message: 'There is an error!' + err });
+            return res.status(400).send({ message: 'Error: ' + err });
         }
         if (result) {
             const accessToken = generateAccessToken({ username: user.username, isAdmin: user.isAdmin });

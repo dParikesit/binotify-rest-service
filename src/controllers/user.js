@@ -33,9 +33,9 @@ const createUser = (req, res) => {
             name: data.name,
             isAdmin: false,
         }).then(user => {
-            res.status(201).json({message: "User created!", user: user});
+            return res.status(201).json({message: "User created!", user: user});
         }).catch(error => {
-            res.status(400).json({message: "Error: " + error});
+            return res.status(400).json({message: "Error: " + error});
         })
     });
 }

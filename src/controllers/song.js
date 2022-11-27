@@ -47,36 +47,36 @@ const getSongById = (req, res) => {
 
 const updateSong = async (req, res) => {
     const song_id = req.params.song_id;
-
     try {
+        let judul = "";
+        let audio_path = "";
+        await Song.findOne({where: {song_id: song_id}}).then(song => {
+            judul = song.judul;
+            audio_path = song.audio_path;
+        }).catch(error => {
+            return res.status(400).json({message: "Song is not found"});
+        })
+
         if (!req.body.judul) {
-            await Song.findOne({where: {song_id: song_id}}).then(song => {
-                req.body.judul = song.judul;
-            })
+            req.body.judul = judul;
         }
 
-        if (!req.body.audio_path) {
-            await Song.findOne({where: {song_id: song_id}}).then(song => {
-                req.body.path = song.audio_path;
-            })
+        await uploadFile(req, res);
+        if (!req.file) {
+            req.body.path = audio_path;
         } else {
-            await uploadFile(req, res);
-            if (!req.file) {
-                return res.status(400).send({message: "Please upload a file!"});
-            }
             req.body.path = req.file.filename;
         }
     } catch (error) {
         return res.status(400).json({message: "Error: " + error});
     }
-
     Song.update({
         judul: req.body.judul,
         audio_path: req.body.path,
     }, {where: {song_id: song_id}}).then(song => {
         return res.status(200).json({message: "Song updated!"});
     }).catch(error => {
-        return res.status(400).json({message: "There is an error!"});
+        return res.status(400).json({message: "Error: " + error});
     })
 }
 
