@@ -10,6 +10,6 @@ router.post('/login', login);
 router.get('/test', authenticateToken, (req, res) => {
     res.status(200).json({message: "Test successful!"});
 });
-router.get('/listpenyanyi', findAll);
+router.get('/listpenyanyi', authenticateToken, findAll);
 
 module.exports = router;
