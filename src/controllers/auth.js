@@ -18,7 +18,7 @@ const login = async (req, res) => {
             const accessToken = generateAccessToken({ username: user.username, isAdmin: user.isAdmin });
             return res
             .cookie("access_token", accessToken, {secure: true, httpOnly: true, sameSite: 'none'})
-            .status(200).json({ message: 'Login successful', isAdmin: user.isAdmin });
+            .status(200).json({ message: 'Login successful', isAdmin: user.isAdmin, id: user.id, username: user.username });
         }
         return res.status(400).send({ message: 'Password does not match' });
     });
