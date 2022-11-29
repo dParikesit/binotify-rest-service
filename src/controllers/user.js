@@ -7,7 +7,7 @@ let redisClient;
 
 (async () => {
     redisClient = redis.createClient({
-        // url: 'redis://redis/'
+        url: 'redis://redis/'
     });
 
     redisClient.on("error", function (err) {
@@ -55,9 +55,9 @@ const createUser = (req, res) => {
             redisClient.del("listpenyanyi", function(err, reply){
                 console.log("Deleted cache list penyanyi :" + reply);
             });
-            res.status(201).send({message: "User created!", user: user});
+            return res.status(201).send({message: "User created!", user: user});
         }).catch(error => {
-            res.status(400).send({message: "Error: " + error});
+            return res.status(400).send({message: "Error: " + error});
         })
     });
 }
