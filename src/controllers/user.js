@@ -50,9 +50,12 @@ const createUser = (req, res) => {
             name: data.name,
             isAdmin: false,
         }).then(user => {
-            return res.status(201).json({message: "User created!", user: user});
+            redisClient.del("listpenyanyi", function(err, reply){
+                console.log("Deleted cache list penyanyi :" + reply);
+            });
+            res.status(201).send({message: "User created!", user: user});
         }).catch(error => {
-            return res.status(400).json({message: "Error: " + error});
+            res.status(400).send({message: "Error: " + error});
         })
     });
 }
@@ -101,11 +104,9 @@ const findAll = async (req, res) => {
                 });
             };
             redisClient.set('listpenyanyi', JSON.stringify(users))
-            .then((users) => {
-                return res.status(200).send({
-                    fromCache: false,
-                    data: users
-                })
+            return res.status(200).send({
+                fromCache: false,
+                data: users 
             });
         })
         .catch(error => {
