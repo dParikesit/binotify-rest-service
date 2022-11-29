@@ -6,11 +6,16 @@ const redis = require("redis");
 let redisClient;
 
 (async () => {
-  redisClient = redis.createClient();
+    redisClient = redis.createClient();
 
-  redisClient.on("error", (error) => console.error(`Error : ${error}`));
+    redisClient.on("error", function (err) {
+        console.log("Error " + err)
+        redisClient.del("listpenyanyi", function(err, reply){
+            console.log("Deleted cache list penyanyi :" + reply);
+        });
+    });
 
-  await redisClient.connect();
+    await redisClient.connect();
 })();
 
 const createUser = (req, res) => {
@@ -82,10 +87,10 @@ const findAll = async (req, res) => {
     // get all users isAdmin = false
     const cacheResults = await redisClient.get('listpenyanyi');
     if (cacheResults) {
-      results = JSON.parse(cacheResults);
+        results = JSON.parse(cacheResults);
         return res.status(200).send({
             fromCache: true,
-            data: json(results).conditions
+            data: results
         })
     } else {
         User.findAll({where: {isAdmin: false}})
@@ -99,7 +104,7 @@ const findAll = async (req, res) => {
             .then((users) => {
                 return res.status(200).send({
                     fromCache: false,
-                    data: json(users).conditions
+                    data: users
                 })
             });
         })
