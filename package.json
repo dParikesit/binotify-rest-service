@@ -26,6 +26,7 @@
     "prettier": "^2.7.1",
     "redis": "^4.5.1",
     "sequelize": "^6.25.5",
-    "sequelize-cli": "^6.5.2"
+    "sequelize-cli": "^6.5.2",
+    "soap": "^0.45.0"
   }
 }
