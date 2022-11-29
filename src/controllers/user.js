@@ -1,5 +1,17 @@
 const User = require('../models').User;
 const bcrypt = require('bcrypt');
+const { json } = require('sequelize');
+const redis = require("redis");
+
+let redisClient;
+
+(async () => {
+  redisClient = redis.createClient();
+
+  redisClient.on("error", (error) => console.error(`Error : ${error}`));
+
+  await redisClient.connect();
+})();
 
 const createUser = (req, res) => {
     let data = req.body;
@@ -66,17 +78,35 @@ const getById = (req, res) => {
     })
 }
 
-const findAll = (req, res) => {
+const findAll = async (req, res) => {
     // get all users isAdmin = false
-    User.findAll({where: {isAdmin: false}})
-    .then(users => {
-        if (!users) {
-            return res.status(404).send({message: "Users not found!"});
-        }
-        return res.status(200).json(users);
-    }).catch(error => {
-        return res.status(400).json({message: "Error: " + error});
-    })
+    const cacheResults = await redisClient.get('listpenyanyi');
+    if (cacheResults) {
+      results = JSON.parse(cacheResults);
+        return res.status(200).send({
+            fromCache: true,
+            data: json(results).conditions
+        })
+    } else {
+        User.findAll({where: {isAdmin: false}})
+        .then(users => {
+            if (!users) {
+                return res.status(404).send({
+                    message: "Users not found!"
+                });
+            };
+            redisClient.set('listpenyanyi', JSON.stringify(users))
+            .then((users) => {
+                return res.status(200).send({
+                    fromCache: false,
+                    data: json(users).conditions
+                })
+            });
+        })
+        .catch(error => {
+            return res.status(400).json({message: "Error: " + error});
+        })
+    }
 }
 
 module.exports = {
