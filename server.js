@@ -26,12 +26,15 @@ console.log("Synced db.");
 console.log("Failed to sync db: " + err.message);
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
-});
-
 const userRoutes = require("./src/routes/user");
 app.use("/api", userRoutes);
 
 const songRoutes = require("./src/routes/song");
 app.use("/api", songRoutes);
+
+const subsRoutes = require('./src/routes/subscription');
+app.use('/api/subs', subsRoutes);
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}.`);
+});
