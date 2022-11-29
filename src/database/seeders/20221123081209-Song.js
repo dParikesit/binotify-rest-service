@@ -4,7 +4,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) =>
     queryInterface.bulkInsert(
-        'songs',
+        'Songs',
         [
           {
             song_id: "e1f3f5cc-b1b4-4cd1-b33c-3fe4a7217bbf",
