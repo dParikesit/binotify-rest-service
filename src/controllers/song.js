@@ -8,7 +8,7 @@ const createSong = async (req, res) => {
         if (!req.file) {
             return res.status(400).send({message: "Please upload a file!"});
         }
-        req.body.path = req.file.filename;
+        req.body.path = 'http://localhost:3002/static/' + req.file.filename;
 
     } catch (error) {
         return res.status(400).send({message: "Error: " + error});
@@ -65,7 +65,7 @@ const updateSong = async (req, res) => {
         if (!req.file) {
             req.body.path = audio_path;
         } else {
-            req.body.path = req.file.filename;
+            req.body.path = 'http://localhost:3002/static/' + req.file.filename;
         }
     } catch (error) {
         return res.status(400).json({message: "Error: " + error});

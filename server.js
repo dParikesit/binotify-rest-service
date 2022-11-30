@@ -26,6 +26,9 @@ console.log("Synced db.");
 console.log("Failed to sync db: " + err.message);
 });
 
+const path = require('path')
+app.use('/static', express.static(path.join(__dirname, 'uploads')))
+
 const userRoutes = require("./src/routes/user");
 app.use("/api", userRoutes);
 

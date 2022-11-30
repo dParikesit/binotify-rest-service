@@ -10,7 +10,7 @@ router.get('/songs', authenticateToken, getAllSongs);
 router.get('/song/:song_id', authenticateToken, getSongById);
 router.put('/song/update/:song_id', authenticateToken, updateSong);
 router.post('/song/delete/:song_id', authenticateToken, deleteSong);
-router.get('/songs/penyanyi/:penyanyi_id', authenticateToken, getSongsByPenyanyiId);
+router.get('/songs/penyanyi/:penyanyi_id', getSongsByPenyanyiId);
 router.get('/song/:song_id/penyanyi/:penyanyi_id', authenticateToken, getSongByPenyanyiId);
 router.get('song/listen/:song_id', authenticateToken, listenSong);
 
