@@ -1,4 +1,5 @@
 const soap = require('soap');
+const User = require('../models').User;
 const url = 'http://soap/subs?wsdl';
 const { XMLParser } = require('fast-xml-parser');
 
@@ -34,14 +35,29 @@ const getPending = async (req, res) => {
         await client.addSoapHeader(token);
         let result = await client.getPendingAsync({});
         let item = JSON.parse(result[0]['return']);
+        const userList = await User.findAll();
 
-        await res.status(200).json(item.records);
+        let response = [];
+
+        for (const element of item.records) {
+            for (const user of userList) {
+                if (element[0] == user['dataValues'].id) {
+                    response.push({
+                        creator_name: user['dataValues'].name,
+                        creator_id: element[0],
+                        subscriber_id: element[1]
+                    });
+                }
+            }
+        }
+
+        await res.status(200).json(response);
     } catch (error) {
         console.log(error)
         const err = parser.parse(error['body']);
         console.log(err['S:Envelope']['S:Body']['S:Fault']['faultstring']);
 
-        await res.status(500).json('Get failed');
+        await res.status(500).json({ message: 'Get failed' });
     }
 };
 
@@ -56,7 +72,7 @@ const acceptSubscribe = async (req, res) => {
         const err = parser.parse(error['body']);
         console.log(err['S:Envelope']['S:Body']['S:Fault']['faultstring']);
 
-        await res.status(500).json('Accept failed');
+        await res.status(500).json({ message: 'Accept failed' });
     }
 };
 
@@ -71,7 +87,7 @@ const rejectSubscribe = async (req, res) => {
         const err = parser.parse(error['body']);
         console.log(err['S:Envelope']['S:Body']['S:Fault']['faultstring']);
 
-        await res.status(500).json('Reject failed');
+        await res.status(500).json({ message: 'Reject failed' });
     }
 }
 
