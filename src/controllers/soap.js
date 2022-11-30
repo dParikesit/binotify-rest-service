@@ -91,16 +91,16 @@ const rejectSubscribe = async (req, res) => {
     }
 }
 
-const getSubscribe = async (req, res) => {
+const getSubStatus = async (req, res) => {
     const creator_id = parseInt(req.params.creator_id);
     const subscriber_id = parseInt(req.params.subscriber_id);
     try {
         let client = await soap.createClientAsync(url);
         await client.addSoapHeader(token);
-        let result = await client.getSubscribeAsync({creator_id, subscriber_id});
+        let result = await client.getSubStatusAsync({creator_id, subscriber_id});
         let item = JSON.parse(result[0]['return']);
 
-        await res.status(200).json(item.records);
+        await res.status(200).json({ message: item.records[0][2] });
     } catch (error) {
         const err = parser.parse(error['body']);
         console.log(err['S:Envelope']['S:Body']['S:Fault']['faultstring']);
@@ -109,4 +109,4 @@ const getSubscribe = async (req, res) => {
     }
 }
 
-module.exports = { reqSubscribe, getPending, acceptSubscribe, rejectSubscribe, getSubscribe };
+module.exports = { reqSubscribe, getPending, acceptSubscribe, rejectSubscribe, getSubStatus };
