@@ -76,11 +76,12 @@ const rejectSubscribe = async (req, res) => {
 }
 
 const getSubscribe = async (req, res) => {
-    const subscriber_id = parseInt(req.params.id);
+    const creator_id = parseInt(req.params.creator_id);
+    const subscriber_id = parseInt(req.params.subscriber_id);
     try {
         let client = await soap.createClientAsync(url);
         await client.addSoapHeader(token);
-        let result = await client.getSubscribeAsync({subscriber_id});
+        let result = await client.getSubscribeAsync({creator_id, subscriber_id});
         let item = JSON.parse(result[0]['return']);
 
         await res.status(200).json(item.records);
