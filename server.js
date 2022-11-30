@@ -18,7 +18,7 @@ app.use(cors({
 app.use(cookieParser());
 
 const db = require("./src/models");
-db.sequelize.sync({ force: true })
+db.sequelize.sync({ alter: true })
 .then(() => {
 console.log("Synced db.");
 })
