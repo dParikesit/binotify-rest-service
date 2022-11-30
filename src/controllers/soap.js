@@ -32,13 +32,10 @@ const getPending = async (req, res) => {
     try {
         let client = await soap.createClientAsync(url);
         await client.addSoapHeader(token);
-        const describe = await client.describe();
-        // console.log(describe['SubServiceService']['SubServicePort']);
         let result = await client.getPendingAsync({});
         let item = JSON.parse(result[0]['return']);
-        console.log(item)
 
-        await res.status(200).json(item);
+        await res.status(200).json(item.records);
     } catch (error) {
         console.log(error)
         const err = parser.parse(error['body']);
@@ -78,4 +75,21 @@ const rejectSubscribe = async (req, res) => {
     }
 }
 
-module.exports = { reqSubscribe, getPending, acceptSubscribe, rejectSubscribe };
+const getSubscribe = async (req, res) => {
+    const subscriber_id = parseInt(req.params.id);
+    try {
+        let client = await soap.createClientAsync(url);
+        await client.addSoapHeader(token);
+        let result = await client.getSubscribeAsync({subscriber_id});
+        let item = JSON.parse(result[0]['return']);
+
+        await res.status(200).json(item.records);
+    } catch (error) {
+        const err = parser.parse(error['body']);
+        console.log(err['S:Envelope']['S:Body']['S:Fault']['faultstring']);
+
+        await res.status(500).json('Get failed');
+    }
+}
+
+module.exports = { reqSubscribe, getPending, acceptSubscribe, rejectSubscribe, getSubscribe };
