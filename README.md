@@ -18,6 +18,7 @@ cd binotify-rest-service
 #### Development
 ```
 # create .env file based on .env.example
+yarn install
 yarn dev
 # endpoint started in http://localhost:3002
 ```
