@@ -105,10 +105,17 @@ const findAll = async (req, res) => {
                     message: "Users not found!"
                 });
             };
-            redisClient.set('listpenyanyi', JSON.stringify(users))
+            let userList = users.map(user => {
+                return {
+                    creator_id: user.id,
+                    username: user.username,
+                    name: user.name,
+                };
+            })
+            redisClient.set('listpenyanyi', JSON.stringify(userList))
             return res.status(200).send({
                 fromCache: false,
-                data: users 
+                data: userList
             });
         })
         .catch(error => {
