@@ -22,6 +22,24 @@ yarn install
 yarn dev
 # endpoint started in http://localhost:3002
 ```
+
+#### Database
+```
+"Users"
+id SERIAL PK
+email VARCHAR(256) NOT NULL UNIQUE
+password VARCHAR(256) NOT NULL
+username VARCHAR(256) NOT NULL UNIQUE
+name VARCHAR(256) NOT NULL
+isAdmin BOOLEAN NOT NULL DEFAULT FALSE
+
+"Songs"
+song_id UUID PK NOT NULL DEFAULT uuid_generate_v4()
+judul VARCHAR(64) NOT NULL
+penyanyi_id INTEGER NOT NULL REFERENCES "Users" (id) ON UPDATE CASCADE on DELETE SET NULL
+audio_path VARCHAR(256)
+```
+
 ## Endpoint
 ```
 URL : `http://localhost:3002/`
