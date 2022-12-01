@@ -109,4 +109,31 @@ const getSubStatus = async (req, res) => {
     }
 }
 
-module.exports = { reqSubscribe, getPending, acceptSubscribe, rejectSubscribe, getSubStatus };
+const getSubStatusBatch = async (req, res) => {
+    const subscriber_id = parseInt(req.params.subscriber_id);
+    try {
+        let client = await soap.createClientAsync(url);
+        await client.addSoapHeader(token);
+        let result = await client.getSubStatusBatchAsync({ subscriber_id });
+        let item = (JSON.parse(result[0]['return'])).records;
+
+        let response = []
+        for (const record of item) {
+            response.push({
+                creator_id: record[0],
+                subscriber_id: record[1],
+                status: record[2]
+            })
+        }
+
+        await res.set()
+        await res.status(200).json({ data: response });
+    } catch (error) {
+        const err = parser.parse(error['body']);
+        console.log(err['S:Envelope']['S:Body']['S:Fault']['faultstring']);
+
+        await res.status(500).json('Get failed');
+    }
+};
+
+module.exports = { reqSubscribe, getPending, acceptSubscribe, rejectSubscribe, getSubStatus, getSubStatusBatch };
