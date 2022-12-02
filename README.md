@@ -76,7 +76,7 @@ Database ORM | 13520058
 Authentikasi | 13520058
 JWT | 13520058
 Routes | 13520058
-CRUD Lagu Premium & Upload | 13520058
+CRUD Lagu Premium & Upload | 13520058 13520057
 List Penyanyi | 13520058, 13520057
 List Lagu Penyanyi | 13520058
 Subscription | 13520087
