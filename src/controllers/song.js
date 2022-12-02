@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const Song = require('../models').Song;
 const uploadFile = require('../middlewares/upload');
 
@@ -93,13 +94,31 @@ const updateSong = async (req, res) => {
 
 const deleteSong = (req, res) => {
     const song_id = req.params.song_id;
-    Song.destroy({ where: { song_id: song_id } })
+
+    Song.findOne({ where: { song_id: song_id } })
         .then((song) => {
-            return res.status(200).json({ message: 'Song deleted!' });
+            pathUrl = song.audio_path;
+            pathArr = pathUrl.split('/');
+            audioName = pathArr[pathArr.length - 1];
+
+            fs.unlinkSync("/app/uploads/"+audioName, (err) => {
+                if (err) {
+                    console.log('oops');
+                }
+            });
+
+            Song.destroy({ where: { song_id: song_id } })
+                .then((song) => {
+                    return res.status(200).json({ message: 'Song deleted!' });
+                })
+                .catch((error) => {
+                    return res.status(400).json({ message: 'Error: ' + error });
+                })
         })
         .catch((error) => {
-            return res.status(400).json({ message: 'Error: ' + error });
+            return res.status(400).json({ message: JSON.stringify(error) });
         });
+    
 };
 
 // get Song by penyanyi_id
