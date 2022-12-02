@@ -12,19 +12,22 @@ app.use(express.urlencoded({
 }));
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'https://localhost:3003', 'http://localhost:3001', process.env.CLIENT_URL],
+    origin: ['http://localhost:3000', 'https://localhost:3003', process.env.CLIENT_URL],
     credentials: true,
 }));
 app.use(cookieParser());
 
 const db = require("./src/models");
-db.sequelize.sync({ force: true })
+db.sequelize.sync({ alter: true })
 .then(() => {
 console.log("Synced db.");
 })
 .catch((err) => {
 console.log("Failed to sync db: " + err.message);
 });
+
+const path = require('path')
+app.use('/static', express.static(path.join(__dirname, 'uploads')))
 
 const userRoutes = require("./src/routes/user");
 app.use("/api", userRoutes);

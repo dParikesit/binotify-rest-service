@@ -4,6 +4,14 @@
     "password": "postgres",
     "database": "binotify_rest_service",
     "port": 5432,
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "binotify_rest_service",
+    "port": 5432,
     "host": "postgres-rest",
     "dialect": "postgres"
   }

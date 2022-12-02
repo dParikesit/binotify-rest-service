@@ -9,6 +9,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       password: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       username: {
@@ -17,19 +18,23 @@ module.exports = {
         type: Sequelize.STRING,
       },
       name: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       isAdmin: {
         allowNull: false,
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },
