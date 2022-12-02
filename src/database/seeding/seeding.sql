@@ -8,16 +8,16 @@ VALUES ('iniuser','iniuser@gmail.com','$2a$10$I5MHgviRl/Nryj0QGqqZT.dZVd2uS5hVa9
 ('inipenyanyi3','inipenyanyi3@gmail.com','$2a$10$PqdI9LfcN8/KRN70KmaK4u1SqBPh4pEyU8vHFuVADvbT8CwQIuyVy','inipenyanyi3',false);
 
 
-INSERT INTO "Songs" (song_id, judul, penyanyi_id, audio_path)
-VALUES ('e1f3f5cc-b1b4-4cd1-b33c-3fe4a7217bbf','Hypeboy',3, 'http://localhost:3002/static/Hypeboy.mp3'),
-('0930a156-5859-4ef2-8e8f-1b70f2d259e3','Attention',3, 'http://localhost:3002/static/Attention.mp3'),
-('xxxx','BBIBBI',4, 'http://localhost:3002/static/BBIBBI.mp3'),
-('xxxx','eight',4, 'http://localhost:3002/static/eight.mp3'),
-('xxxx','Blueming',4, 'http://localhost:3002/static/Blueming.mp3'),
-('xxxx','Palette',4, 'http://localhost:3002/static/Palette.mp3'),
-('xxxx','DDU-DU_DDU-DU',5, 'http://localhost:3002/static/DDU-DU_DDU-DU.mp3'),
-('xxxx','Dont_Know_What_To_Do',5, 'http://localhost:3002/static/Dont_Know_What_To_Do.mp3'),
-('xxxx','Forever_Young',5, 'http://localhost:3002/static/Forever_Young.mp3');
+INSERT INTO "Songs" (judul, penyanyi_id, audio_path)
+VALUES ('Hypeboy',3, 'http://localhost:3002/static/Hypeboy.mp3'),
+('Attention',3, 'http://localhost:3002/static/Attention.mp3'),
+('BBIBBI',4, 'http://localhost:3002/static/BBIBBI.mp3'),
+('eight',4, 'http://localhost:3002/static/eight.mp3'),
+('Blueming',4, 'http://localhost:3002/static/Blueming.mp3'),
+('Palette',4, 'http://localhost:3002/static/Palette.mp3'),
+('DDU-DU_DDU-DU',5, 'http://localhost:3002/static/DDU-DU_DDU-DU.mp3'),
+('Dont_Know_What_To_Do',5, 'http://localhost:3002/static/Dont_Know_What_To_Do.mp3'),
+('Forever_Young',5, 'http://localhost:3002/static/Forever_Young.mp3');
 
 
 -- INSERT INTO "Users" (name, email, password, username, "isAdmin", "createdAt", "updatedAt") VALUES ('iniuser','iniuser@gmail.com','$2a$10$I5MHgviRl/Nryj0QGqqZT.dZVd2uS5hVa97OCgwHxoLcxqK/T9vEi','iniuser',false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), ('iniadmin','iniadmin@gmail.com','$2a$10$gdjn341z.L.bkDlPKrfTNu47CP5kBk8rd1dHEyy5wwBVblCu87gnO','iniadmin',true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

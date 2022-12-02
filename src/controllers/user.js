@@ -20,54 +20,59 @@ let redisClient;
     await redisClient.connect();
 })();
 
-const createUser = (req, res) => {
+const createUser = async(req, res) => {
     let data = req.body;
     // check if the user already exists
-    User.findOne({where: {email: data.email}}).then(user => {
-        if (user) {
-            return res.status(400).send({
-                message: 'User already exists'
-            });
-        }
-    })
 
-    User.findOne({where: {username: data.username}}).then(user => {
+    try {
+        let user = await User.findOne({ where: { email: data.email } });
         if (user) {
             return res.status(400).json({
                 message: 'User already exists'
             });
         }
-    })
 
-    if (data.password !== data.confirm_password) {
-        return res.status(400).json({
-            message: 'Password does not match'
+        user = await User.findOne({ where: { username: data.username } });
+        if (user) {
+            return res.status(400).json({
+                message: 'User already exists'
+            });
+        }
+
+        if (data.password !== data.confirm_password) {
+            return res.status(400).json({
+                message: 'Password does not match'
+            });
+        }
+
+        // hash password
+        bcrypt.hash(data.password, 10, (err, hash) => {
+            if (err) {
+                return res.status(400).json({
+                    message: 'Error: ' + err
+                });
+            }
+
+            User.create({
+                email: data.email,
+                password: hash,
+                username: data.username,
+                name: data.name,
+                isAdmin: false
+            })
+                .then((user) => {
+                    redisClient.del('listpenyanyi', function (err, reply) {
+                        console.log('Deleted cache list penyanyi :' + reply);
+                    });
+                    return res.status(201).json({ message: 'User created!', user: user });
+                })
+                .catch((error) => {
+                    return res.status(400).json({ message: 'Error: ' + error });
+                });
         });
+    } catch (error) {
+        return res.status(500).json({ message: 'Error: ' + error });
     }
-
-    // hash password
-    bcrypt.hash(data.password, 10, (err, hash) => {
-        if (err) {
-            return res.status(400).json({
-                message: 'Error: ' + err
-            });
-        }
-
-        User.create({
-            email: data.email,
-            password: hash,
-            username: data.username,
-            name: data.name,
-            isAdmin: false,
-        }).then(user => {
-            redisClient.del("listpenyanyi", function(err, reply){
-                console.log("Deleted cache list penyanyi :" + reply);
-            });
-            return res.status(201).json({message: "User created!", user: user});
-        }).catch(error => {
-            return res.status(400).json({message: "Error: " + error});
-        })
-    });
 }
 
 const getByUsername = (req, res) => {
