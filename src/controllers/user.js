@@ -31,8 +31,16 @@ const createUser = (req, res) => {
         }
     })
 
+    User.findOne({where: {username: data.username}}).then(user => {
+        if (user) {
+            return res.status(400).json({
+                message: 'User already exists'
+            });
+        }
+    })
+
     if (data.password !== data.confirm_password) {
-        return res.status(400).send({
+        return res.status(400).json({
             message: 'Password does not match'
         });
     }
@@ -40,7 +48,7 @@ const createUser = (req, res) => {
     // hash password
     bcrypt.hash(data.password, 10, (err, hash) => {
         if (err) {
-            return res.status(400).send({
+            return res.status(400).json({
                 message: 'Error: ' + err
             });
         }
@@ -55,9 +63,9 @@ const createUser = (req, res) => {
             redisClient.del("listpenyanyi", function(err, reply){
                 console.log("Deleted cache list penyanyi :" + reply);
             });
-            res.status(201).send({message: "User created!", user: user});
+            return res.status(201).json({message: "User created!", user: user});
         }).catch(error => {
-            res.status(400).send({message: "Error: " + error});
+            return res.status(400).json({message: "Error: " + error});
         })
     });
 }
