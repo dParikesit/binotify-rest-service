@@ -3,6 +3,9 @@
 Aplikasi ini dibuat untuk pemenuhan Tugas Besar 2 IF3110 Web Based Development tahun 2022/2023.
 Aplikasi ini digunakan sebagai REST API endpoint untuk Premium App.
 
+#### Deskripsi Singkat
+Web service merupakan aplikasi yang berisi sekumpulan basis data (database) dan perangkat lunak (software) atau bagian dari program perangkat lunak yang diakses secara remote oleh piranti dengan perantara tertentu. REST atau Representational State Transfer adalah salah satu gaya arsitektur yang dapat diadaptasikan ketika membangun web service. RESTful merupakan sebutan untuk web services yang menerapkan arsitektur REST. API atau Application Program Interface sendiri merupakan antarmuka yang menjadi perantara antara sistem aplikasi yang berbeda. 
+
 ## Requirement
 - Docker-compose 3.9
 - NPM / Yarn
